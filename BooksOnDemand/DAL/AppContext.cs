@@ -5,6 +5,7 @@ using MongoDB.Driver.Builders;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 
@@ -32,13 +33,38 @@ namespace BooksOnDemand.DAL
             } 
         }
 
-        public IList<Book> GetBooks() {
+        public IEnumerable<Book> GetBooks() {
             
-            var collections = _database.GetCollection<Book>("Book");
+            var collections = Database.GetCollection<Book>("Book");
             List<Book> books = new List<Book>();
-            var booksCollection = collections.Find<Book>(new BsonDocument()).ToList();
+            
+            return collections.Find<Book>(new BsonDocument()).ToEnumerable();
+        }
 
-            return books;
+        public async Task<IEnumerable<Book>> GetBooksAsync()
+        {
+
+            var collections = Database.GetCollection<Book>("Book");
+
+            //return Task.Run(() => collections.FindAsync<Book>(new BsonDocument()));
+            //return await collections.FindAsync<Book>(new BsonDocument());
+
+            using (var cursor = await collections.FindAsync<Book>(new BsonDocument()))
+            {
+
+                return cursor.ToEnumerable();
+
+                /*while (await cursor.MoveNextAsync())
+                {
+                    var batch = cursor.Current;
+                    foreach (var document in batch)
+                    {
+                        // process document
+                        count++;
+                    }
+                }*/
+            }
+
         }
 
     }
