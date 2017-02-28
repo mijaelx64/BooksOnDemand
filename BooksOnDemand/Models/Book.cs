@@ -8,6 +8,11 @@ namespace BooksOnDemand.Models
 {
     public class Book
     {
+        public Book()
+        {
+            UserDemands = new List<ObjectId>();
+        }
+
         public ObjectId Id { get; set; }
         public List<string> Authors { get; set; }
         public string Description { get; set; }

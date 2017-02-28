@@ -48,9 +48,12 @@
             @Html.DisplayFor(modelItem => item.Publisher)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-            @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            <input type="button" value="Demand" onclick="location.href='@Url.Action("Demand/"+item.Id.ToString(),"Books")'" />
+            <br />
+            @Html.Label(item.UserDemands.Count.ToString() + " Demands")
+            <br />
+            @Html.ActionLink("Details", "Details", new {  id=item.Id.ToString() }) 
+
         </td>
     </tr>
 }

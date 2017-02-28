@@ -45,6 +45,15 @@ namespace BooksOnDemand.DAL
             return collections.Find<User>(new BsonDocument()).ToEnumerable();
         }
 
+        public Book GetBook(string id)
+        {
+            var collections = Database.GetCollection<Book>("Book");
+            Book retrievedObject;
+            FilterDefinition<Book> theFilter = Builders<Book>.Filter.Eq(p => p.Id, ObjectId.Parse(id));
+            retrievedObject = collections.Find<Book>(theFilter).First();
+            return retrievedObject;
+        }
+
         public void RegisterUser(User user)
         {
             try
