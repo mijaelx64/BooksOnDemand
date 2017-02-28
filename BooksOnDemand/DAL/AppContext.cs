@@ -45,6 +45,19 @@ namespace BooksOnDemand.DAL
             return collections.Find<User>(new BsonDocument()).ToEnumerable();
         }
 
+        public void RegisterUser(User user)
+        {
+            try
+            {
+                var collections = Database.GetCollection<User>("User");
+                collections.InsertOne(user);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
+        }
+
         public async Task<IEnumerable<Book>> GetBooksAsync()
         {
 
