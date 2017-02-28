@@ -15,6 +15,9 @@
             @Html.DisplayNameFor(model => model.Title)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.Authors)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.Description)
         </th>
         <th>
@@ -30,8 +33,17 @@
             @Html.DisplayFor(modelItem => item.Title)
         </td>
         <td>
+            <ul>
+                @foreach (var author in item.Authors)
+                {
+                    <li>@Html.DisplayFor(modelItem => author)</li>
+                }
+            </ul>
+        </td>
+        <td>
             @Html.DisplayFor(modelItem => item.Description)
         </td>
+
         <td>
             @Html.DisplayFor(modelItem => item.Publisher)
         </td>
