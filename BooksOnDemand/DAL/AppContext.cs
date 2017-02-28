@@ -36,9 +36,13 @@ namespace BooksOnDemand.DAL
         public IEnumerable<Book> GetBooks() {
             
             var collections = Database.GetCollection<Book>("Book");
-            List<Book> books = new List<Book>();
-            
             return collections.Find<Book>(new BsonDocument()).ToEnumerable();
+        }
+
+        public IEnumerable<User> GetUsers()
+        {
+            var collections = Database.GetCollection<User>("User");
+            return collections.Find<User>(new BsonDocument()).ToEnumerable();
         }
 
         public async Task<IEnumerable<Book>> GetBooksAsync()

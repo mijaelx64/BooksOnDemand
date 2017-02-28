@@ -13,5 +13,6 @@ namespace BooksOnDemand.Models
         public string Description { get; set; }
         public string Publisher { get; set; }
         public string Title { get; set; }
+        public List<ObjectId> UserDemands { get; set; }
     }
 }

@@ -11,5 +11,6 @@ namespace BooksOnDemand.Models
         public ObjectId Id { get; set; }
         public string Password { get; set; }
         public string Username { get; set; }
+        //public List<ObjectId> BookDemands { get; set; }
     }
 }
