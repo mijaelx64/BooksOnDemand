@@ -12,10 +12,21 @@ namespace BooksOnDemand.Controllers
     public class BooksController : Controller
     {
         // GET: Books
-        public ActionResult Index()
+        public ActionResult Index(string searchString)
         {
             var ctx = new DAL.AppContext();
-            return View(ctx.GetBooks());
+
+            var books = ctx.GetBooks();
+
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                books = books.Where(s => s.Title.ToLower().Contains(searchString)
+                                       || s.Authors.Where( x => x.ToLower().Contains(searchString)).Count() >= 1  
+                                       || s.Publisher.ToLower().Contains(searchString));
+            }
+
+            return View(books);
         }
 
         public ActionResult Demand(string id, bool? demand)
