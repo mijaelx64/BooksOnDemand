@@ -54,6 +54,21 @@ namespace BooksOnDemand.DAL
             return retrievedObject;
         }
 
+        public void DemandBook(string bookId, string userId)
+        {
+            var bookCollection = Database.GetCollection<Book>("Book");
+           
+            var bookFilter = Builders<Book>.Filter.Eq(p => p.Id, ObjectId.Parse(bookId));
+            var bookUpdate = Builders<Book>.Update.Push("UserDemands", ObjectId.Parse(userId));
+            bookCollection.UpdateOne(bookFilter, bookUpdate);
+
+            var userCollection = Database.GetCollection<User>("User");
+
+            var userFilter = Builders<User>.Filter.Eq(p => p.Id, ObjectId.Parse(userId));
+            var userUpdate = Builders<User>.Update.Push("BookDemands", ObjectId.Parse(bookId));
+            userCollection.UpdateOne(userFilter, userUpdate);
+        }
+
         public void RegisterUser(User user)
         {
             try

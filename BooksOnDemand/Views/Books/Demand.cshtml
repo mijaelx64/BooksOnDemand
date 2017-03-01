@@ -39,6 +39,26 @@
             @Html.DisplayFor(model => model.Publisher)
         </dd>
     </dl>
+
+    @if (ViewBag.IsDemanded)
+    {
+        <div class="alert alert-info" role="alert">You Already Demanded This Book.</div>
+    }
+    else
+    {
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                @using (Html.BeginForm("Demand", "Books", FormMethod.Get, new { @class = "form-horizontal", role = "form" }))
+                {
+                    <input type="button" value="Demand Book" class="btn btn-default"
+                           onclick="location.href='@Url.Action("Demand","Books")?demand=true'" />
+                }
+            </div>
+        </div>
+    }
+
+    
+
 </div>
 <p>
     @Html.ActionLink("Back to List", "Index")
