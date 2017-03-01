@@ -11,8 +11,6 @@ namespace BooksOnDemand.Controllers
 {
     public class BooksController : Controller
     {
-        
-
         // GET: Books
         public ActionResult Index()
         {
@@ -26,6 +24,11 @@ namespace BooksOnDemand.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Login","Authentication");
+            }
+
             var ctx = new DAL.AppContext();
             Book bookObj = ctx.GetBook(id);
             // TODO URGENT: QUERY BOOK by ID
@@ -36,11 +39,7 @@ namespace BooksOnDemand.Controllers
 
             ViewBag.Id = id;
             //  CHECK IF Book IS DEMANDED OR NOT YET.
-
-            if (Session["UserID"]!=null)
-            {
-                ViewBag.IsDemanded = bookObj.UserDemands.Contains(ObjectId.Parse(Session["UserID"].ToString()));
-            }
+            ViewBag.IsDemanded = bookObj.UserDemands.Contains(ObjectId.Parse(Session["UserID"].ToString()));
 
             demand = demand == null ? false: true;
 

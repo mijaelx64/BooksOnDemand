@@ -11,15 +11,12 @@ using System.Web.Mvc;
 
 namespace BooksOnDemand.DAL
 {
-    
-
     public class AppContext
     {
         private const string DBNAME = "Crossover";
         private const string CONNECTIONSTRING = "mongodb://localhost:27017";
         
         private MongoClient _client;
-        private MongoServer _server;
         private IMongoDatabase _database;
 
         public IMongoDatabase Database {
