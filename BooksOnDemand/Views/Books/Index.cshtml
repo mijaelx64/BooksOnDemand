@@ -1,4 +1,6 @@
-﻿@model IEnumerable<BooksOnDemand.Models.Book>
+﻿@model PagedList.IPagedList<BooksOnDemand.Models.Book>
+@using PagedList.Mvc;
+<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />
 
 @{
     ViewBag.Title = "Index";
@@ -22,21 +24,21 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.Title)
+            Title
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Authors)
+            Authors
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Description)
+            Description
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Publisher)
+            Publisher
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model.Take(50))
+@foreach (var item in Model)
 {
     <tr>
         <td>
@@ -68,3 +70,8 @@
     </tr>
 }
 </table>
+<br />
+Page @(Model.PageCount < Model.PageNumber ? 0 : Model.PageNumber) of @Model.PageCount
+
+@Html.PagedListPager(Model, page => Url.Action("Index",
+    new { page, sortOrder = ViewBag.CurrentSort, currentFilter = ViewBag.CurrentFilter }))

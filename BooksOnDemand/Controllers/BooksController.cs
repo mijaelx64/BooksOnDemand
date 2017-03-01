@@ -1,5 +1,6 @@
 ﻿using BooksOnDemand.Models;
 using MongoDB.Bson;
+using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,10 +13,21 @@ namespace BooksOnDemand.Controllers
     public class BooksController : Controller
     {
         // GET: Books
-        public ActionResult Index(string searchString)
+        public ActionResult Index(string currentFilter, string searchString, int? page)
         {
-            var ctx = new DAL.AppContext();
 
+            if (searchString != null)
+            {
+                page = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+
+            ViewBag.CurrentFilter = searchString;
+
+            var ctx = new DAL.AppContext();
             var books = ctx.GetBooks();
 
             if (!String.IsNullOrEmpty(searchString))
@@ -26,7 +38,10 @@ namespace BooksOnDemand.Controllers
                                        || s.Publisher.ToLower().Contains(searchString));
             }
 
-            return View(books);
+
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(books.ToPagedList(pageNumber, pageSize));
         }
 
         public ActionResult Demand(string id, bool? demand)
