@@ -1,4 +1,5 @@
 ﻿using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,16 +9,13 @@ namespace BooksOnDemand.Models
 {
     public class Book
     {
-        public Book()
-        {
-            UserDemands = new List<ObjectId>();
-        }
-
-        public ObjectId Id { get; set; }
+        [BsonId]
+        [BsonRepresentation(BsonType.ObjectId)]
+        public string Id { get; set; }
         public List<string> Authors { get; set; }
         public string Description { get; set; }
         public string Publisher { get; set; }
         public string Title { get; set; }
-        public List<ObjectId> UserDemands { get; set; }
+        //public List<ObjectId> UserDemands { get; set; }
     }
 }

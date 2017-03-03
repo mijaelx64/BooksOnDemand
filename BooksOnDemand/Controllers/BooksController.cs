@@ -1,21 +1,25 @@
 ﻿using BooksOnDemand.Models;
 using MongoDB.Bson;
+using Newtonsoft.Json;
 using PagedList;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Web;
+using System.Web.Http;
 using System.Web.Mvc;
 
 namespace BooksOnDemand.Controllers
 {
     public class BooksController : Controller
     {
+
         // GET: Books
         public ActionResult Index(string currentFilter, string searchString, int? page)
         {
-
             if (searchString != null)
             {
                 page = 1;
@@ -27,55 +31,64 @@ namespace BooksOnDemand.Controllers
 
             ViewBag.CurrentFilter = searchString;
 
-            var ctx = new DAL.AppContext();
-            var books = ctx.GetBooks();
-
-            if (!String.IsNullOrEmpty(searchString))
+            try
             {
-                searchString = searchString.ToLower();
-                books = books.Where(s => s.Title.ToLower().Contains(searchString)
-                                       || s.Authors.Where( x => x.ToLower().Contains(searchString)).Count() >= 1  
-                                       || s.Publisher.ToLower().Contains(searchString));
+                string jsonRespond = CrossoverClient.GetJSON("api/books");
+                IEnumerable<Book> books = JsonConvert.DeserializeObject<IEnumerable<Book>>(jsonRespond);
+
+                if (!String.IsNullOrEmpty(searchString))
+                {
+                    searchString = searchString.ToLower();
+                    books = books.Where(s => s.Title.ToLower().Contains(searchString)
+                                           || s.Authors.Where(x => x.ToLower().Contains(searchString)).Count() >= 1
+                                           || s.Publisher.ToLower().Contains(searchString));
+                }
+
+                int pageSize = 3;
+                int pageNumber = (page ?? 1);
+                return View(books.ToPagedList(pageNumber, pageSize));
             }
-
-
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(books.ToPagedList(pageNumber, pageSize));
+            catch (HttpResponseException ex)
+            {
+                return new HttpStatusCodeResult(ex.Response.StatusCode, ex.Message);
+            }
         }
 
         public ActionResult Demand(string id, bool? demand)
         {
             if (string.IsNullOrEmpty(id))
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest, 
+                     "An Id must be set in order to get a book information.");
             }
+
             if (Session["UserID"] == null)
             {
                 return RedirectToAction("Login","Authentication");
             }
 
-            var ctx = new DAL.AppContext();
-            Book bookObj = ctx.GetBook(id);
-            // TODO URGENT: QUERY BOOK by ID
-            if (bookObj == null)
+            ViewBag.IsDemanded = false;
+
+            try
             {
-                return HttpNotFound();
+                string jsonRespond = CrossoverClient.GetJSON("api/books/" + id);
+                Book bookObj = JsonConvert.DeserializeObject<Book>(jsonRespond);
+
+                ViewBag.Id = id;
+                demand = demand == null ? false : true;
+
+                if ((bool)demand && !ViewBag.IsDemanded)
+                {
+                    //ctx.DemandBook(id , Session["UserID"].ToString());
+                    ViewBag.IsDemanded = true;
+                }
+
+                return View(bookObj);
             }
-
-            ViewBag.Id = id;
-            //  CHECK IF Book IS DEMANDED OR NOT YET.
-            ViewBag.IsDemanded = bookObj.UserDemands.Contains(ObjectId.Parse(Session["UserID"].ToString()));
-
-            demand = demand == null ? false: true;
-
-            if ((bool)demand && !ViewBag.IsDemanded)
+            catch (HttpResponseException ex)
             {
-                ctx.DemandBook(id , Session["UserID"].ToString());
-                ViewBag.IsDemanded = true;
+                return new HttpStatusCodeResult(ex.Response.StatusCode, ex.Message);
             }
-
-            return View(bookObj);
         }
     }
 }

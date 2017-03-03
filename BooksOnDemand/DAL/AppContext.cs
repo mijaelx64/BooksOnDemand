@@ -46,7 +46,7 @@ namespace BooksOnDemand.DAL
         {
             var collections = Database.GetCollection<Book>("Book");
             Book retrievedObject;
-            FilterDefinition<Book> theFilter = Builders<Book>.Filter.Eq(p => p.Id, ObjectId.Parse(id));
+            FilterDefinition<Book> theFilter = Builders<Book>.Filter.Eq(p => p.Id, id);
             retrievedObject = collections.Find<Book>(theFilter).First();
             return retrievedObject;
         }
@@ -55,7 +55,7 @@ namespace BooksOnDemand.DAL
         {
             var bookCollection = Database.GetCollection<Book>("Book");
            
-            var bookFilter = Builders<Book>.Filter.Eq(p => p.Id, ObjectId.Parse(bookId));
+            var bookFilter = Builders<Book>.Filter.Eq(p => p.Id,bookId);
             var bookUpdate = Builders<Book>.Update.Push("UserDemands", ObjectId.Parse(userId));
             bookCollection.UpdateOne(bookFilter, bookUpdate);
 
