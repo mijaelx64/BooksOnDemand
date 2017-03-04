@@ -1,34 +1,41 @@
 # BooksOnDemand
 Books on Demads App for demand bookin your library.
 
-## Synopsis
+Application solution based on Web Service to search for published books and place demands for them.
 
-At the top of the file there should be a short introduction and/ or overview that explains **what** the project is. This description should match descriptions added for package managers (Gemspec, package.json, etc.)
+## Prerequisites
 
-## Code Example
+1. C# 6.0
 
-Show what the library does as concisely as possible, developers should be able to figure out **how** your project solves their problem by looking at the code example. Make sure the API you are showing off is obvious, and that your code is short and concise.
+2.  Visual Studio 2015
 
-## Motivation
+3. .Net Framework 4.6 or above
 
-A short description of the motivation behind the creation and maintenance of the project. This should explain **why** the project exists.
+4. ASP.NET MVC
 
-## Installation
+5. ASP.NET Web Api
 
-Provide code examples and explanations of how to get the project.
+6. Mongo DB server
 
-## API Reference
+7. MongoDb-CSharp driver
 
-Depending on the size of the project, if it is small and simple enough the reference docs can be added to the README. For medium size to larger projects it is important to at least provide a link to where the API reference docs live.
+8. NuGet package manager
 
-## Tests
+## Mongo DB Configuration Steps
 
-Describe and show how to run the tests with code examples.
+1. The default conection is configured with localhost:27017, please configure your mongoDB with port *27017*.
+2. Initial DB: Please run the Mongo basic DB script here:
+   (https://techtrial.s3.amazonaws.com/System/SoftwareEngineerGeneric_PublishedBooks.zip)
 
-## Contributors
+## Localhost Installation
 
-Let people know how they can dive into the project, include important links to things like issue trackers, irc, twitter accounts if applicable.
+1. Clone or Download the source code from https://github.com/mijaelx64/BooksOnDemand/archive/master.zip
 
-## License
+2. Open the project with Visual Studio.
 
-A short snippet describing the license (MIT, Apache, etc.)
+3. In Project Properties: Please change the Project Url to next : http://localhost:55464/
+
+## Feedback
+
+As a .Net Project, this project shouldn't be working with MongoDB and WebAPI. 
+.NET Developers are used to work with SQL Server and WCF Technologies. 
