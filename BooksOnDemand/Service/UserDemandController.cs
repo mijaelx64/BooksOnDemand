@@ -51,25 +51,43 @@ namespace BooksOnDemand.Service
             var collection = CrossoverContext.Database.GetCollection<UserDemand>("UserDemand");
 
             FilterDefinition<UserDemand> filter = Builders<UserDemand>.Filter.Eq(p => p.UserId, userId);
-            return Ok(collection.Find<UserDemand>(filter).FirstOrDefault().BooksDemands.Contains(bookId));
+
+            var userDemandObj = collection.Find<UserDemand>(filter).FirstOrDefault();
+
+            if (userDemandObj!=null)
+            {
+                return Ok(userDemandObj.BooksDemands.Contains(bookId));
+            }
+
+            return Ok(false);
         }
 
-
-
-        /*[HttpPost]
-        public void DemandBook(string bookId, string userId)
+        public IHttpActionResult GetUserDemand(string userId)
         {
-            /*var bookCollection = Database.GetCollection<Book>("Book");
+            if (string.IsNullOrEmpty(userId))
+            {
+                return BadRequest("An Id must be set in order to find your request.");
+            }
 
-            var bookFilter = Builders<Book>.Filter.Eq(p => p.Id, bookId);
-            var bookUpdate = Builders<Book>.Update.Push("UserDemands", ObjectId.Parse(userId));
-            bookCollection.UpdateOne(bookFilter, bookUpdate);
+            try
+            {
+                var collection = CrossoverContext.Database.GetCollection<UserDemand>("UserDemand");
 
-            var userCollection = Database.GetCollection<User>("User");
+                FilterDefinition<UserDemand> filter = Builders<UserDemand>.Filter.Eq(p => p.UserId, userId);
 
-            var userFilter = Builders<User>.Filter.Eq(p => p.Id, ObjectId.Parse(userId));
-            var userUpdate = Builders<User>.Update.Push("BookDemands", ObjectId.Parse(bookId));
-            userCollection.UpdateOne(userFilter, userUpdate);
-        }*/
+                var userDemandObj = collection.Find<UserDemand>(filter).FirstOrDefault();
+
+                if (userDemandObj != null)
+                {
+                    return Ok(userDemandObj);
+                }
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+        }
     }
 }

@@ -1,0 +1,51 @@
+﻿@model IEnumerable<BooksOnDemand.Models.Book>
+
+<h2>My Demanded Books</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            Title
+        </th>
+        <th>
+            Authors
+        </th>
+        <th>
+            Description
+        </th>
+        <th>
+            Publisher
+        </th>
+        
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Title)
+            </td>
+            <td>
+                <ul>
+                    @foreach (var author in item.Authors)
+                    {
+                        <li>@Html.DisplayFor(modelItem => author)</li>
+                    }
+                </ul>
+            </td>
+            <td>
+                <div class="panel panel-default">
+                    <div class="panel-body">
+
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </div>
+                </div>
+            </td>
+
+            <td>
+                @Html.DisplayFor(modelItem => item.Publisher)
+            </td>
+            
+        </tr>
+    }
+</table>

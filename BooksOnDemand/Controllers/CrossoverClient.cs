@@ -33,14 +33,35 @@ namespace BooksOnDemand.Controllers
             throw new HttpResponseException(response);
         }
 
+        public static string PostRequestJSON<T>(string RequestURI, T content)
+        {
+            HttpResponseMessage response;
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(SERVICEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                response = client.PostAsJsonAsync(RequestURI, content).Result;
+
+                if (response.IsSuccessStatusCode)
+                    return response.Content.ReadAsStringAsync().Result;
+            }
+
+            throw new HttpResponseException(response);
+        }
+
         public static HttpResponseMessage PostRequest<T>(string RequestURI, T content)
         {
-            HttpClient client = new HttpClient();
-            client.BaseAddress = new Uri(SERVICEURL);
-            client.DefaultRequestHeaders.Accept.Clear();
-            client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
-            HttpResponseMessage response = client.PostAsJsonAsync(RequestURI, content).Result;
-            return response;
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(SERVICEURL);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                return client.PostAsJsonAsync(RequestURI, content).Result;
+            }
         }
     }
 }

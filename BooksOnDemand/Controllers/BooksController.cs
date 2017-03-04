@@ -17,11 +17,12 @@ namespace BooksOnDemand.Controllers
 {
     public class BooksController : Controller
     {
+        private const int PAGESIZE = 3;
 
         // GET: Books
         public ActionResult Index(string currentFilter, string searchString, int? page)
         {
-            if (searchString != null)
+            if (!string.IsNullOrEmpty(searchString))
             {
                 page = 1;
             }
@@ -35,21 +36,12 @@ namespace BooksOnDemand.Controllers
             try
             {
                 string requestString = "api/books?searchString=" + searchString;
-                
                 string jsonRespond = CrossoverClient.GetJSON(requestString);
+
                 IEnumerable<Book> books = JsonConvert.DeserializeObject<IEnumerable<Book>>(jsonRespond);
-
-                if (!String.IsNullOrEmpty(searchString))
-                {
-                    searchString = searchString.ToLower();
-                    books = books.Where(s => s.Title.ToLower().Contains(searchString)
-                                           || s.Authors.Where(x => x.ToLower().Contains(searchString)).Count() >= 1
-                                           || s.Publisher.ToLower().Contains(searchString));
-                }
-
-                int pageSize = 3;
+                
                 int pageNumber = (page ?? 1);
-                return View(books.ToPagedList(pageNumber, pageSize));
+                return View(books.ToPagedList(pageNumber, PAGESIZE));
             }
             catch (HttpResponseException ex)
             {
@@ -67,10 +59,8 @@ namespace BooksOnDemand.Controllers
 
             if (Session["UserID"] == null)
             {
-                return RedirectToAction("Login","Authentication");
+                return RedirectToAction("Login","Account");
             }
-
-            
 
             try
             {
@@ -89,7 +79,7 @@ namespace BooksOnDemand.Controllers
 
                 if ((bool)demand && !ViewBag.IsDemanded)
                 {
-                    CrossoverClient.PostRequest<UserDemand>("api/userdemand/", 
+                    CrossoverClient.PostRequestJSON<UserDemand>("api/userdemand/", 
                         new UserDemand()
                         {
                             UserId = Session["UserID"].ToString() ,
@@ -99,6 +89,39 @@ namespace BooksOnDemand.Controllers
                 }
 
                 return View(bookObj);
+            }
+            catch (HttpResponseException ex)
+            {
+                return new HttpStatusCodeResult(ex.Response.StatusCode, ex.Message);
+            }
+        }
+
+        public ActionResult DemandsByUser()
+        {
+            if (Session["UserID"] == null)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
+            try
+            {
+                string jsonRespond = CrossoverClient.GetJSON("api/userdemand?userid=" + Session["UserID"].ToString());
+                UserDemand userDemandObj = JsonConvert.DeserializeObject<UserDemand>(jsonRespond);
+                List<Book> bookList = new List<Book>();
+
+                if (userDemandObj == null)
+                {
+                    return View(bookList);
+                }
+                
+                foreach (var bookId in userDemandObj.BooksDemands)
+                {
+                    string respond = CrossoverClient.GetJSON("api/books/" + bookId);
+                    Book bookObj = JsonConvert.DeserializeObject<Book>(respond);
+                    bookList.Add(bookObj);
+                }
+
+                return View(bookList);
             }
             catch (HttpResponseException ex)
             {

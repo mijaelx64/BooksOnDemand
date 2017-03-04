@@ -160,11 +160,12 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\WebApiConfig.cs" />
-    <Compile Include="Controllers\AuthenticationController.cs" />
+    <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\CrossoverClient.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Models\UserDemand.cs" />
+    <Compile Include="Service\AccountController.cs" />
     <Compile Include="Service\BooksController.cs" />
     <Compile Include="DAL\AppContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -229,9 +230,10 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Books\Index.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
-    <Content Include="Views\Authentication\Login.cshtml" />
-    <Content Include="Views\Authentication\Register.cshtml" />
+    <Content Include="Views\Account\Login.cshtml" />
+    <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Books\Demand.cshtml" />
+    <Content Include="Views\Books\DemandsByUser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
