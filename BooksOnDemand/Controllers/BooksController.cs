@@ -8,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text;
 using System.Web;
 using System.Web.Http;
 using System.Web.Mvc;
@@ -67,7 +68,7 @@ namespace BooksOnDemand.Controllers
                 return RedirectToAction("Login","Authentication");
             }
 
-            ViewBag.IsDemanded = false;
+            
 
             try
             {
@@ -75,11 +76,23 @@ namespace BooksOnDemand.Controllers
                 Book bookObj = JsonConvert.DeserializeObject<Book>(jsonRespond);
 
                 ViewBag.Id = id;
+
+                jsonRespond = CrossoverClient.GetJSON(
+                    string.Format("api/userdemand?userid={0}&bookid={1}", Session["UserID"].ToString(), id));
+
+                bool isDemanded = JsonConvert.DeserializeObject<bool>(jsonRespond);
+
+                ViewBag.IsDemanded = isDemanded;
                 demand = demand == null ? false : true;
 
                 if ((bool)demand && !ViewBag.IsDemanded)
                 {
-                    //ctx.DemandBook(id , Session["UserID"].ToString());
+                    CrossoverClient.PostRequest<UserDemand>("api/userdemand/", 
+                        new UserDemand()
+                        {
+                            UserId = Session["UserID"].ToString() ,
+                            BooksDemands = new List<string>() { id }
+                        });
                     ViewBag.IsDemanded = true;
                 }
 

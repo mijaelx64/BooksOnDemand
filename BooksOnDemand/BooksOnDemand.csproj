@@ -164,6 +164,7 @@
     <Compile Include="Controllers\BooksController.cs" />
     <Compile Include="Controllers\CrossoverClient.cs" />
     <Compile Include="Controllers\HomeController.cs" />
+    <Compile Include="Models\UserDemand.cs" />
     <Compile Include="Service\BooksController.cs" />
     <Compile Include="DAL\AppContext.cs" />
     <Compile Include="Global.asax.cs">
@@ -174,6 +175,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service\CrossoverContext.cs" />
+    <Compile Include="Service\UserDemandController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\bootstrap-theme.css" />
