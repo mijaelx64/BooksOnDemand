@@ -6,18 +6,15 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Index</h2>
+<h2>Books Published</h2>
 
-<p>
-    @Html.ActionLink("Create New", "Create")
-</p>
-
-@using (Html.BeginForm("Index", "Books", FormMethod.Get))
+@using (Html.BeginForm("Index", "Books", FormMethod.Get, new { @class = "form-inline bd-search hidden-sm-down" }))
 {
-    <p>
-        Find by name: @Html.TextBox("SearchString", ViewBag.CurrentFilter as string)
-        <input type="submit" value="Search" />
-    </p>
+    
+        @Html.TextBox("SearchString", ViewBag.CurrentFilter as string,
+       new { type = "text", placeholder = "Search...", @class = "form-control", @for = "inlineFormInput" })
+        <input type="submit" value="Search" class="btn btn-default" />
+    
 }
 
 
