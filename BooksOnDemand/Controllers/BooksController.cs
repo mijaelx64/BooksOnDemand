@@ -34,7 +34,9 @@ namespace BooksOnDemand.Controllers
 
             try
             {
-                string jsonRespond = CrossoverClient.GetJSON("api/books");
+                string requestString = "api/books?searchString=" + searchString;
+                
+                string jsonRespond = CrossoverClient.GetJSON(requestString);
                 IEnumerable<Book> books = JsonConvert.DeserializeObject<IEnumerable<Book>>(jsonRespond);
 
                 if (!String.IsNullOrEmpty(searchString))

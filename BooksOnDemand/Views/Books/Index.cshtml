@@ -6,7 +6,7 @@
     ViewBag.Title = "Index";
 }
 
-<h2>Books Published</h2>
+<h2>Published Books</h2>
 
 @using (Html.BeginForm("Index", "Books", FormMethod.Get, new { @class = "form-inline bd-search hidden-sm-down" }))
 {
@@ -14,9 +14,7 @@
         @Html.TextBox("SearchString", ViewBag.CurrentFilter as string,
        new { type = "text", placeholder = "Search...", @class = "form-control", @for = "inlineFormInput" })
         <input type="submit" value="Search" class="btn btn-default" />
-    
 }
-
 
 <table class="table">
     <tr>

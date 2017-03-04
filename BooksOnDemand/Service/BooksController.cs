@@ -15,7 +15,23 @@ namespace BooksOnDemand.Controllers.Service
     {
         public IEnumerable<Book> GetAllBooks()
         {
+            return GetAllBooks(string.Empty);
+        }
+
+        public IEnumerable<Book> GetAllBooks(string searchString)
+        {
             var collection = CrossoverContext.Database.GetCollection<Book>("Book");
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                searchString = searchString.ToLower();
+                var result = collection.Find<Book>(new BsonDocument()).ToList()
+                    .Where(s => s.Title.ToLower().Contains(searchString)
+                                       || s.Authors.Where(x => x.ToLower().Contains(searchString)).Count() >= 1
+                                       || s.Publisher.ToLower().Contains(searchString));
+                return result;
+            }
+
             return collection.Find<Book>(new BsonDocument()).ToEnumerable();
         }
 
