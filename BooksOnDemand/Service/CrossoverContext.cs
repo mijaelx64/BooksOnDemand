@@ -14,6 +14,9 @@ namespace BooksOnDemand.Service
         private static MongoClient _client;
         private static IMongoDatabase _database;
 
+        /// <summary>
+        /// Mongo DB Reference
+        /// </summary>
         public static IMongoDatabase Database
         {
             get

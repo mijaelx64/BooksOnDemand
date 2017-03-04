@@ -13,11 +13,22 @@ namespace BooksOnDemand.Controllers.Service
 {
     public class BooksController : ApiController
     {
+        /// <summary>
+        /// GET: Retrive all books with no search.
+        /// TODO: /api/books/ Documentation 
+        /// </summary>
+        /// <returns></returns>
         public IEnumerable<Book> GetAllBooks()
         {
             return GetAllBooks(string.Empty);
         }
 
+        /// <summary>
+        /// GET: Retrive all books with no search.
+        /// TODO: /api/books?searchString="{searchString}" Documentation 
+        /// </summary>
+        /// <param name="searchString"></param>
+        /// <returns></returns>
         public IEnumerable<Book> GetAllBooks(string searchString)
         {
             var collection = CrossoverContext.Database.GetCollection<Book>("Book");
@@ -35,6 +46,12 @@ namespace BooksOnDemand.Controllers.Service
             return collection.Find<Book>(new BsonDocument()).ToEnumerable();
         }
 
+        /// <summary>
+        /// GET: Get a book by Id.
+        /// TODO: /api/books?id="{id}" Documentation 
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public IHttpActionResult GetBook(string id)
         {
             if (string.IsNullOrEmpty(id))

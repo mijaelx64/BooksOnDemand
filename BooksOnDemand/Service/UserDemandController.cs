@@ -12,7 +12,12 @@ namespace BooksOnDemand.Service
 {
     public class UserDemandController : ApiController
     {
-
+        /// <summary>
+        /// POST: Add a book demand for an specific user.
+        /// TODO: POST: api/userdemand/ Params: UserDemand Object  - Make Documentation 
+        /// </summary>
+        /// <param name="postRequest"></param>
+        /// <returns></returns>
         [HttpPost]
         public IHttpActionResult PostUserDemand(UserDemand postRequest)
         {
@@ -41,6 +46,13 @@ namespace BooksOnDemand.Service
             return Ok();
         }
 
+        /// <summary>
+        /// GET: Get if a book is already demanded by a user.
+        /// TODO: api/userdemand?userId={userId}&bookId={bookId} Documentation
+        /// </summary> 
+        /// <param name="userId"></param>
+        /// <param name="bookId"></param>
+        /// <returns></returns>
         public IHttpActionResult GetUserDemand(string userId, string bookId)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(bookId))
@@ -62,6 +74,12 @@ namespace BooksOnDemand.Service
             return Ok(false);
         }
 
+        /// <summary>
+        /// GET: Get User demands Object that contains demanded books for an specific user. 
+        /// TODO: api/userdemand/{id} Documentation
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <returns></returns>
         public IHttpActionResult GetUserDemand(string userId)
         {
             if (string.IsNullOrEmpty(userId))

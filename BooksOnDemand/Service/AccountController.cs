@@ -13,7 +13,8 @@ namespace BooksOnDemand.Service
     public class LoginController : ApiController
     {
         /// <summary>
-        /// Login user by username and password.
+        /// Login user by username and password. Get userId.
+        /// POST: api/Login
         /// </summary>
         /// <param name="username">Username</param>
         /// <param name="password">Password</param>
@@ -35,9 +36,14 @@ namespace BooksOnDemand.Service
         }
     }
 
-
     public class RegisterController : ApiController
     {
+        /// <summary>
+        /// POST: Register User by sending RegisterViewModel object. 
+        /// api/register/ RegisterViewModel - Make Documentation
+        /// </summary>
+        /// <param name="user"></param>
+        /// <returns></returns>
         public IHttpActionResult PostRegister(RegisterViewModel user)
         {
             try
